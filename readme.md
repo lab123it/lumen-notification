@@ -21,14 +21,14 @@ Register the package in the section "Register Service Providers"
 	$app->register(\LumenNotification\LumenNotificationServiceProvider::class);
 	
 
-# Publish #
+## Publish ##
 
 To can use the views from Laravel Notifications, use the command wrapper from php artisan vendor:publish:
 
 	php artisan lumen-notification:publish
 	
 
-# Commands #
+## Commands ##
 
 After register the Service Provider the aplication can execute the commands:
 
@@ -39,3 +39,5 @@ Equivalent to php artisan make:notification in Laravel 5.3
 Equivalent to php artisan vendor:publish in Laravel
  
 	php artisan lumen-notification:publish
+	
+### To more information how to use Notifications: [Laravel Notification](url "https://laravel.com/docs/5.3/notifications") ###
