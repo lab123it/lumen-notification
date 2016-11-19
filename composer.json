@@ -1,0 +1,49 @@
+{
+	"name": "lab123/lumen-notification",
+	"type": "library",
+	"description": "Wrapper of Laravel Notification adapted to work with Lumen 5.x",
+	"keywords": [
+		"lumen",
+		"laravel",
+		"notification",
+		"laravel-notification",
+		"lumen-notification",
+		"wrapper"
+	],
+	"homepage": "https://github.com/lab123/lumen-notification",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Jean Pierre",
+			"email": "jean.pierre@lab123.com.br"
+		},
+		{
+			"name": "Felipe Santos",
+			"email": "felipe.santos@lab123.com.br"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"LumenNotification\\": "src/"
+		}
+	},
+	"require": {
+		"php": ">=5.6.4",
+		"illuminate/notifications": "^5.3",
+		"illuminate/mail": "^5.3",
+		"swiftmailer/swiftmailer": "^5.4"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~5.0"
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/"
+		],
+		"psr-4": {
+			"LumenNotification\\": "src/"
+		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
+}
