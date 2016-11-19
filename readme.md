@@ -1,6 +1,6 @@
 # Laravel 5.3 Notification for Lumen 5.x #
 
-This package is a wrapper of [Laravel Notification](url "https://laravel.com/docs/5.3/notifications") adapted to work with Lumen 5.x
+This package is a wrapper of [Laravel Notification](https://laravel.com/docs/5.3/notifications) adapted to work with Lumen 5.x
 
 ## Installation ##
 
@@ -40,4 +40,4 @@ Equivalent to php artisan vendor:publish in Laravel
  
 	php artisan lumen-notification:publish
 	
-### To more information how to use Notifications: [Laravel Notification](url "https://laravel.com/docs/5.3/notifications") ###
+### To more information how to use Notifications: [Laravel Notification](https://laravel.com/docs/5.3/notifications) ###
