@@ -1,5 +1,12 @@
 # Laravel 5.3 Notification for Lumen 5.x #
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/lab123/lumen-notification.svg?style=flat-square)](https://packagist.org/packages/lab123/lumen-notification)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/lab123/lumen-notification/master.svg?style=flat-square)](https://travis-ci.org/lab123/lumen-notification)
+[![Quality Score](https://img.shields.io/scrutinizer/g/lab123/lumen-notification.svg?style=flat-square)](https://scrutinizer-ci.com/g/lab123/lumen-notification)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/lab123/lumen-notification/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/lab123/lumen-notification/?branch=master)
+[![Total Downloads](https://img.shields.io/packagist/dt/lab123/lumen-notification.svg?style=flat-square)](https://packagist.org/packages/lab123/lumen-notification)
+
 This package is a wrapper of [Laravel Notification](https://laravel.com/docs/5.3/notifications) adapted to work with Lumen 5.x
 
 ## Contents
