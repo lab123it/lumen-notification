@@ -42,8 +42,8 @@ class LumenNotificationServiceProvider extends ServiceProvider
     protected function registerPublish()
     {
         $this->publishes([
-            __DIR__ . '/Config/mail.php' => config_path('mail.php'),
-            __DIR__ . '/Config/services.php' => config_path('services.php')
+            __DIR__ . '/Config/mail.php' => $this->config_path('mail.php'),
+            __DIR__ . '/Config/services.php' => $this->config_path('services.php')
         ]);
     }
 
@@ -90,5 +90,15 @@ class LumenNotificationServiceProvider extends ServiceProvider
         app()->bind(\Illuminate\Contracts\Mail\Mailer::class, function ($app) {
             return $app['mailer'];
         });
+    }
+
+    /**
+     * Return Config Path
+     *
+     * @return $path
+     */
+    public function config_path($path)
+    {
+        return app()->basePath('config/') . $path;
     }
 }
