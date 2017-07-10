@@ -24,7 +24,7 @@ This package is a wrapper of [Laravel Notification](https://laravel.com/docs/5.3
 
 Can to install with commands:
 
-	composer require lab123ti/lumen-notification
+	composer require lab123/lumen-notification
 	
 Or editing the `composer.json` file:
 
