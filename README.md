@@ -27,10 +27,12 @@ Can to install with commands:
 	composer require lab123/lumen-notification
 	
 Or editing the `composer.json` file:
+```
+"require": {
+    "lab123/lumen-notification": "dev-master"
+}
+```
 
-	"require": {
-    	"lab123/lumen-notification": "dev-master"
-    }
 
 Register the package in the section "Register Service Providers" in `bootstrap/app.php`
 
