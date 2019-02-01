@@ -48,7 +48,7 @@ class LumenNotificationPublishCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         $paths = ServiceProvider::pathsToPublish($this->option('provider'), $this->option('tag'));
         if (empty($paths)) {
