@@ -1,7 +1,7 @@
 {
 	"name": "lab123/lumen-notification",
 	"type": "library",
-	"description": "Wrapper of Laravel Notification adapted to work with Lumen 5.x",
+	"description": "Laravel Notifications wiring for Illuminate-based apps (ex-Lumen): service provider, mail/services config and artisan commands",
 	"keywords": [
 		"lumen",
 		"laravel",
@@ -10,16 +10,12 @@
 		"lumen-notification",
 		"wrapper"
 	],
-	"homepage": "https://github.com/lab123/lumen-notification",
+	"homepage": "https://github.com/lab123it/lumen-notification",
 	"license": "MIT",
 	"authors": [
 		{
 			"name": "Jean Pierre",
 			"email": "jean.pierre@lab123.com.br"
-		},
-		{
-			"name": "Felipe Santos",
-			"email": "felipe.santos@lab123.com.br"
 		}
 	],
 	"autoload": {
@@ -27,23 +23,35 @@
 			"LumenNotification\\": "src/"
 		}
 	},
-	"require": {
-		"php": ">=5.6.4",
-		"illuminate/notifications": "^5.3",
-		"illuminate/mail": "^5.3",
-		"guzzlehttp/guzzle": "^6.2"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "~5.0"
-	},
 	"autoload-dev": {
-		"classmap": [
-			"tests/"
-		],
 		"psr-4": {
-			"LumenNotification\\": "src/"
+			"LumenNotification\\Tests\\": "tests/"
 		}
 	},
-	"minimum-stability": "dev",
+	"require": {
+		"php": "^8.1",
+		"illuminate/console": "^10.0|^11.0|^12.60|^13.10",
+		"illuminate/database": "^10.0|^11.0|^12.60|^13.10",
+		"illuminate/filesystem": "^10.0|^11.0|^12.60|^13.10",
+		"illuminate/mail": "^10.0|^11.0|^12.60|^13.10",
+		"illuminate/notifications": "^10.0|^11.0|^12.60|^13.10",
+		"illuminate/support": "^10.0|^11.0|^12.60|^13.10"
+	},
+	"require-dev": {
+		"orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+		"phpunit/phpunit": "^10.5|^11.5|^12.0"
+	},
+	"scripts": {
+		"test": "phpunit"
+	},
+	"config": {
+		"sort-packages": true,
+		"policy": {
+			"advisories": {
+				"block": false
+			}
+		}
+	},
+	"minimum-stability": "stable",
 	"prefer-stable": true
 }

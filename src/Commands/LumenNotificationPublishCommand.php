@@ -1,59 +1,48 @@
 <?php
+
 namespace LumenNotification\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\Console\Input\InputOption;
 
 class LumenNotificationPublishCommand extends Command
 {
-
     /**
-     * The filesystem instance.
-     *
-     * @var \Illuminate\Filesystem\Filesystem
-     */
-    protected $files;
-
-    /**
-     * The console command name.
+     * The console command signature.
      *
      * @var string
      */
-    protected $name = 'lumen-notification:publish';
+    protected $signature = 'lumen-notification:publish
+                            {--force : Overwrite any existing files}
+                            {--provider= : The service provider that has assets you want to publish}
+                            {--tag= : The tag that has assets you want to publish}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "Publish any publishable assets from lumen-notification package";
+    protected $description = 'Publish any publishable assets from lumen-notification package';
 
-    /**
-     * Create a new command instance.
-     *
-     * @param
-     *            \Illuminate\Filesystem\Filesystem
-     * @return void
-     */
-    public function __construct(Filesystem $files)
+    public function __construct(protected Filesystem $files)
     {
         parent::__construct();
-        $this->files = $files;
     }
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $paths = ServiceProvider::pathsToPublish($this->option('provider'), $this->option('tag'));
+
         if (empty($paths)) {
-            return $this->comment("Nothing to publish.");
+            $this->comment('Nothing to publish.');
+
+            return;
         }
+
         foreach ($paths as $from => $to) {
             if ($this->files->isFile($from)) {
                 $this->publishFile($from, $to);
@@ -63,94 +52,40 @@ class LumenNotificationPublishCommand extends Command
                 $this->error("Can't locate path: <{$from}>");
             }
         }
+
         $this->info('Publishing Complete!');
     }
 
-    /**
-     * Publish the file to the given path.
-     *
-     * @param string $from            
-     * @param string $to            
-     * @return void
-     */
-    protected function publishFile($from, $to)
+    protected function publishFile(string $from, string $to): void
     {
         if ($this->files->exists($to) && ! $this->option('force')) {
             return;
         }
+
         $this->createParentDirectory(dirname($to));
         $this->files->copy($from, $to);
         $this->status($from, $to, 'File');
     }
 
-    /**
-     * Publish the directory to the given directory.
-     *
-     * @param string $from            
-     * @param string $to            
-     * @return void
-     */
-    protected function publishDirectory($from, $to)
+    protected function publishDirectory(string $from, string $to): void
     {
         $this->files->copyDirectory($from, $to);
-        
         $this->status($from, $to, 'Directory');
     }
 
-    /**
-     * Create the directory to house the published files if needed.
-     *
-     * @param string $directory            
-     * @return void
-     */
-    protected function createParentDirectory($directory)
+    protected function createParentDirectory(string $directory): void
     {
         if (! $this->files->isDirectory($directory)) {
             $this->files->makeDirectory($directory, 0755, true);
         }
     }
 
-    /**
-     * Write a status message to the console.
-     *
-     * @param string $from            
-     * @param string $to            
-     * @param string $type            
-     * @return void
-     */
-    protected function status($from, $to, $type)
+    protected function status(string $from, string $to, string $type): void
     {
-        $from = str_replace(base_path(), '', realpath($from));
-        $to = str_replace(base_path(), '', realpath($to));
-        $this->line('<info>Copied ' . $type . '</info> <comment>[' . $from . ']</comment> <info>To</info> <comment>[' . $to . ']</comment>');
-    }
+        $base = $this->laravel->basePath();
+        $from = str_replace($base, '', (string) realpath($from));
+        $to = str_replace($base, '', (string) realpath($to));
 
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return array(
-            array(
-                'force',
-                null,
-                InputOption::VALUE_NONE,
-                'Overwrite any existing files.'
-            ),
-            array(
-                'provider',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'The service provider that has assets you want to publish.'
-            ),
-            array(
-                'tag',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'The tag that has assets you want to publish.'
-            )
-        );
+        $this->line('<info>Copied ' . $type . '</info> <comment>[' . $from . ']</comment> <info>To</info> <comment>[' . $to . ']</comment>');
     }
 }

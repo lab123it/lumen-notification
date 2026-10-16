@@ -1,104 +1,103 @@
 <?php
+
 namespace LumenNotification;
 
+use Illuminate\Contracts\Mail\Factory as MailFactoryContract;
+use Illuminate\Contracts\Mail\Mailer as MailerContract;
+use Illuminate\Foundation\Application as FoundationApplication;
+use Illuminate\Mail\MailServiceProvider;
+use Illuminate\Notifications\NotificationServiceProvider;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\Factory as ViewFactory;
+use LumenNotification\Commands\LumenNotificationMakeCommand;
+use LumenNotification\Commands\LumenNotificationPublishCommand;
+use LumenNotification\Commands\NotificationTableCommand;
 
 class LumenNotificationServiceProvider extends ServiceProvider
 {
-
     /**
-     * Register any application services.
-     *
-     * @return void
+     * Register the package services.
      */
-    public function boot()
-    {
-        // parent::boot();
-    }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
         $this->registerConfigs();
-        
         $this->registerCommands();
-        
         $this->registerBind();
-        
         $this->registerPublish();
-        
         $this->registerProviders();
     }
 
     /**
-     * Publish configs.
-     *
-     * @return void
+     * Publish the default configuration files.
      */
-    protected function registerPublish()
+    protected function registerPublish(): void
     {
         $this->publishes([
             __DIR__ . '/Config/mail.php' => $this->config_path('mail.php'),
-            __DIR__ . '/Config/services.php' => $this->config_path('services.php')
+            __DIR__ . '/Config/services.php' => $this->config_path('services.php'),
         ]);
     }
 
     /**
-     * Register for Lumen Application.
-     *
-     * @return void
+     * Register the artisan commands.
      */
-    protected function registerCommands()
+    protected function registerCommands(): void
     {
-        $this->commands(\LumenNotification\Commands\LumenNotificationPublishCommand::class);
-        $this->commands(\LumenNotification\Commands\LumenNotificationMakeCommand::class);
+        $this->commands([
+            LumenNotificationPublishCommand::class,
+            LumenNotificationMakeCommand::class,
+            NotificationTableCommand::class,
+        ]);
     }
 
     /**
-     * Register configs.
+     * Load the application configuration, falling back to the package defaults.
      *
-     * @return void
+     * Lumen only loads a config file when it is asked to, so it is configured
+     * explicitly; the defaults are then merged underneath whatever the
+     * application defines.
      */
-    protected function registerConfigs()
+    protected function registerConfigs(): void
     {
-        app()->configure('mail');
-        app()->configure('services');
+        // Laravel's Application has an unrelated static configure(); only Lumen's is an instance loader.
+        if (! $this->app instanceof FoundationApplication && method_exists($this->app, 'configure')) {
+            $this->app->configure('mail');
+            $this->app->configure('services');
+        }
+
+        $this->mergeConfigFrom(__DIR__ . '/Config/mail.php', 'mail');
+        $this->mergeConfigFrom(__DIR__ . '/Config/services.php', 'services');
     }
 
     /**
-     * Register configs.
-     *
-     * @return void
+     * Register the Laravel providers needed by notifications.
      */
-    protected function registerProviders()
+    protected function registerProviders(): void
     {
-        app()->register(\Illuminate\Notifications\NotificationServiceProvider::class);
-        app()->register(\Illuminate\Mail\MailServiceProvider::class);
+        $this->app->register(NotificationServiceProvider::class);
+        $this->app->register(MailServiceProvider::class);
     }
 
     /**
-     * Register component FileSystem.
-     *
-     * @return void
+     * Bind the contracts Lumen does not alias: the mail notification channel
+     * needs the mail factory, and blade components resolve the concrete view
+     * factory.
      */
-    protected function registerBind()
+    protected function registerBind(): void
     {
-        app()->bind(\Illuminate\Contracts\Mail\Mailer::class, function ($app) {
-            return $app['mailer'];
-        });
+        $this->app->bind(MailerContract::class, fn ($app) => $app['mailer']);
+        $this->app->bind(MailFactoryContract::class, fn ($app) => $app['mail.manager']);
+
+        if (! $this->app->isAlias(ViewFactory::class)) {
+            $this->app->bind(ViewFactory::class, fn ($app) => $app['view']);
+        }
     }
 
     /**
-     * Return Config Path
-     *
-     * @return $path
+     * Return the path of a file in the application config directory.
      */
-    public function config_path($path)
+    public function config_path(string $path): string
     {
-        return app()->basePath('config/') . $path;
+        return $this->app->basePath('config/') . $path;
     }
 }

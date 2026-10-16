@@ -1,88 +1,92 @@
-# Laravel 5.3 Notification for Lumen 5.x #
+# Lumen Notification
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lab123/lumen-notification.svg?style=flat-square)](https://packagist.org/packages/lab123/lumen-notification)
+[![tests](https://img.shields.io/github/actions/workflow/status/lab123it/lumen-notification/tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/lab123it/lumen-notification/actions/workflows/tests.yml)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/lab123/lumen-notification/master.svg?style=flat-square)](https://travis-ci.org/lab123/lumen-notification)
-[![Quality Score](https://img.shields.io/scrutinizer/g/lab123/lumen-notification.svg?style=flat-square)](https://scrutinizer-ci.com/g/lab123/lumen-notification)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/lab123/lumen-notification/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/lab123/lumen-notification/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/lab123/lumen-notification.svg?style=flat-square)](https://packagist.org/packages/lab123/lumen-notification)
 
-This package is a wrapper of [Laravel Notification](https://laravel.com/docs/5.3/notifications) adapted to work with Lumen 5.x
+[Laravel Notifications](https://laravel.com/docs/notifications) for Lumen: a service provider that wires notifications and the mailer, default `mail` and `services` config, and the artisan commands Lumen lacks (`make:notification`, `vendor:publish`, `notifications:table`).
 
-## Contents
+It also works on Laravel itself.
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Changelog](#changelog)
-- [Testing](#testing)
-- [Security](#security)
-- [Contributing](#contributing)
-- [Credits](#credits)
-- [License](#license)
+## Requirements
 
-## Installation ##
+- PHP ^8.1
+- Lumen 10 or 11, or Laravel 10, 11, 12 or 13 (`illuminate/*` ^10.0, ^11.0, ^12.60 or ^13.10)
 
-Can to install with commands:
+Verified in real applications: Lumen 10.0 and 11.1, Laravel 10.50, 11.57, 12.70 and 13.37.
 
-	composer require lab123/lumen-notification
-	
-Or editing the `composer.json` file:
+Lumen 5 to 9 apps cannot use this release; stay on `0.1.0-beta.2`.
 
-	"require": {
-    	"lab123/lumen-notification": "dev-master"
-    }
+## Installation
 
-Register the package in the section "Register Service Providers" in `bootstrap/app.php`
+```bash
+composer require lab123/lumen-notification
+```
 
-	$app->register(\LumenNotification\LumenNotificationServiceProvider::class);
-	
+### Laravel 10 and 11, Lumen 10 and 11: security advisory
 
-To can use the views from Laravel Notifications, use the command wrapper from php artisan vendor:publish:
+Composer blocks `illuminate/mail` 10 and 11 because of advisory [PKSA-zwc5-qtrz-zm1n](https://packagist.org/security-advisories/PKSA-zwc5-qtrz-zm1n) (CRLF injection in the default email validation rule). Laravel 10 and 11 are end of life and **have no fix**; only `illuminate/*` ^12.60 and ^13.10 are patched. Running Lumen on Laravel components 10 or 11 means you accept that. To install anyway, in your project:
 
-	php artisan lumen-notification:publish
-	
+```bash
+composer config policy.advisories.ignore-id --json '["PKSA-zwc5-qtrz-zm1n"]'
+composer require lab123/lumen-notification
+```
 
-## Usage
+Laravel 10 itself carries other unfixed advisories, so Composer may ask you to ignore those too. Upgrade the framework when you can.
 
-After register the Service Provider the aplication can execute the commands:
+### Register the provider
 
-Equivalent to php artisan make:notification in Laravel 5.7
- 
-	php artisan lumen-notification:notification
-	
-Equivalent to php artisan vendor:publish in Laravel
- 
-	php artisan lumen-notification:publish
+Lumen (`bootstrap/app.php`):
 
-Equivalent to php artisan notifications:table in Laravel
- 
-	php artisan lumen-notification:table
-	
-### To more information how to use Notifications: [Laravel Notification](https://laravel.com/docs/5.3/notifications) ###
+```php
+$app->register(\LumenNotification\LumenNotificationServiceProvider::class);
+```
 
-## Changelog
+Laravel 11+ (`bootstrap/providers.php`) or Laravel 10 (`config/app.php`): add `\LumenNotification\LumenNotificationServiceProvider::class`.
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+The provider registers `Illuminate\Notifications\NotificationServiceProvider` and `Illuminate\Mail\MailServiceProvider`, binds the mail contracts that Lumen does not alias, and merges the package `mail` and `services` defaults under whatever your application defines.
+
+Publish the config files to `config/`:
+
+```bash
+php artisan lumen-notification:publish
+```
+
+## Commands
+
+| Command | Equivalent in Laravel |
+|---|---|
+| `lumen-notification:notification Name` | `make:notification` |
+| `lumen-notification:publish` | `vendor:publish` (`--force`, `--provider=`, `--tag=`) |
+| `lumen-notification:table` | `notifications:table` |
+
+For the database channel on Lumen, `lumen-notification:table` creates the migration; run it with your own migration tooling, since Lumen has no `migrate` command.
+
+See the [Laravel notification docs](https://laravel.com/docs/notifications) for how to write and send notifications.
 
 ## Testing
 
-``` bash
-$ composer test
+```bash
+composer test
 ```
+
+## Changelog
+
+See [CHANGELOG](CHANGELOG.md).
 
 ## Security
 
-If you discover any security related issues, please email jean.pierre@lab123.com.br instead of using the issue tracker.
+If you discover a security issue, please email jean.pierre@lab123.com.br instead of using the issue tracker.
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+See [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Credits
 
 - [Jean Pierre](https://github.com/jeanpfs)
-- [Felipe Santos](https://github.com/felipeds2)
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). See [License File](LICENSE.md).

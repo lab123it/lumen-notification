@@ -1,11 +1,11 @@
 <?php
+
 namespace LumenNotification\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
 class LumenNotificationMakeCommand extends GeneratorCommand
 {
-
     /**
      * The console command name.
      *
@@ -29,10 +29,8 @@ class LumenNotificationMakeCommand extends GeneratorCommand
 
     /**
      * Get the stub file for the generator.
-     *
-     * @return string
      */
-    protected function getStub()
+    protected function getStub(): string
     {
         return __DIR__ . '/stubs/notification.stub';
     }
@@ -40,10 +38,9 @@ class LumenNotificationMakeCommand extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param string $rootNamespace            
-     * @return string
+     * @param  string  $rootNamespace
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootNamespace): string
     {
         return $rootNamespace . '\Notifications';
     }
