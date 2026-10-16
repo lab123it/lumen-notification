@@ -86,6 +86,6 @@ class LumenNotificationPublishCommand extends Command
         $from = str_replace($base, '', (string) realpath($from));
         $to = str_replace($base, '', (string) realpath($to));
 
-        $this->line('<info>Copied ' . $type . '</info> <comment>[' . $from . ']</comment> <info>To</info> <comment>[' . $to . ']</comment>');
+        $this->line('<info>Copied '.$type.'</info> <comment>['.$from.']</comment> <info>To</info> <comment>['.$to.']</comment>');
     }
 }

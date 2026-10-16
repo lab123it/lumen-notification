@@ -33,8 +33,8 @@ class LumenNotificationServiceProvider extends ServiceProvider
     protected function registerPublish(): void
     {
         $this->publishes([
-            __DIR__ . '/Config/mail.php' => $this->config_path('mail.php'),
-            __DIR__ . '/Config/services.php' => $this->config_path('services.php'),
+            __DIR__.'/Config/mail.php' => $this->config_path('mail.php'),
+            __DIR__.'/Config/services.php' => $this->config_path('services.php'),
         ]);
     }
 
@@ -65,8 +65,8 @@ class LumenNotificationServiceProvider extends ServiceProvider
             $this->app->configure('services');
         }
 
-        $this->mergeConfigFrom(__DIR__ . '/Config/mail.php', 'mail');
-        $this->mergeConfigFrom(__DIR__ . '/Config/services.php', 'services');
+        $this->mergeConfigFrom(__DIR__.'/Config/mail.php', 'mail');
+        $this->mergeConfigFrom(__DIR__.'/Config/services.php', 'services');
     }
 
     /**
@@ -98,6 +98,6 @@ class LumenNotificationServiceProvider extends ServiceProvider
      */
     public function config_path(string $path): string
     {
-        return $this->app->basePath('config/') . $path;
+        return $this->app->basePath('config/').$path;
     }
 }

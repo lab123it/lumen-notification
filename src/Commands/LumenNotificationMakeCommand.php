@@ -32,7 +32,7 @@ class LumenNotificationMakeCommand extends GeneratorCommand
      */
     protected function getStub(): string
     {
-        return __DIR__ . '/stubs/notification.stub';
+        return __DIR__.'/stubs/notification.stub';
     }
 
     /**
@@ -42,6 +42,6 @@ class LumenNotificationMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace . '\Notifications';
+        return $rootNamespace.'\Notifications';
     }
 }
