@@ -1,88 +1,71 @@
-# Laravel 5.3 Notification for Lumen 5.x #
+# Lumen Notification
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lab123/lumen-notification.svg?style=flat-square)](https://packagist.org/packages/lab123/lumen-notification)
+[![tests](https://img.shields.io/github/actions/workflow/status/lab123it/lumen-notification/tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/lab123it/lumen-notification/actions/workflows/tests.yml)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/lab123/lumen-notification/master.svg?style=flat-square)](https://travis-ci.org/lab123/lumen-notification)
-[![Quality Score](https://img.shields.io/scrutinizer/g/lab123/lumen-notification.svg?style=flat-square)](https://scrutinizer-ci.com/g/lab123/lumen-notification)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/lab123/lumen-notification/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/lab123/lumen-notification/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/lab123/lumen-notification.svg?style=flat-square)](https://packagist.org/packages/lab123/lumen-notification)
 
-This package is a wrapper of [Laravel Notification](https://laravel.com/docs/5.3/notifications) adapted to work with Lumen 5.x
+Wires [Laravel Notifications](https://laravel.com/docs/notifications) and the mailer into applications that bootstrap the Illuminate components themselves: a service provider, default `mail` and `services` config, and the artisan commands that Laravel ships in its framework package.
 
-## Contents
+## Requirements
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Changelog](#changelog)
-- [Testing](#testing)
-- [Security](#security)
-- [Contributing](#contributing)
-- [Credits](#credits)
-- [License](#license)
+- PHP ^8.2
+- `illuminate/*` ^12.60 or ^13.10
 
-## Installation ##
+Lumen stopped at Laravel 10, so it cannot install 1.x. Lumen apps must stay on `0.1.0-beta.2`.
 
-Can to install with commands:
+## Installation
 
-	composer require lab123/lumen-notification
-	
-Or editing the `composer.json` file:
+```bash
+composer require lab123/lumen-notification
+```
 
-	"require": {
-    	"lab123/lumen-notification": "dev-master"
-    }
+Register the provider (in a Lumen-style `bootstrap/app.php`):
 
-Register the package in the section "Register Service Providers" in `bootstrap/app.php`
+```php
+$app->register(\LumenNotification\LumenNotificationServiceProvider::class);
+```
 
-	$app->register(\LumenNotification\LumenNotificationServiceProvider::class);
-	
+The provider registers `Illuminate\Notifications\NotificationServiceProvider` and `Illuminate\Mail\MailServiceProvider`, and merges the package `mail` and `services` defaults under whatever your application defines.
 
-To can use the views from Laravel Notifications, use the command wrapper from php artisan vendor:publish:
+Publish the config files to `config/`:
 
-	php artisan lumen-notification:publish
-	
+```bash
+php artisan lumen-notification:publish
+```
 
-## Usage
+## Commands
 
-After register the Service Provider the aplication can execute the commands:
+| Command | Equivalent in Laravel |
+|---|---|
+| `lumen-notification:notification Name` | `make:notification` |
+| `lumen-notification:publish` | `vendor:publish` (`--force`, `--provider=`, `--tag=`) |
+| `lumen-notification:table` | `notifications:table` |
 
-Equivalent to php artisan make:notification in Laravel 5.7
- 
-	php artisan lumen-notification:notification
-	
-Equivalent to php artisan vendor:publish in Laravel
- 
-	php artisan lumen-notification:publish
-
-Equivalent to php artisan notifications:table in Laravel
- 
-	php artisan lumen-notification:table
-	
-### To more information how to use Notifications: [Laravel Notification](https://laravel.com/docs/5.3/notifications) ###
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+See the [Laravel notification docs](https://laravel.com/docs/notifications) for how to write and send notifications.
 
 ## Testing
 
-``` bash
-$ composer test
+```bash
+composer test
 ```
+
+## Changelog
+
+See [CHANGELOG](CHANGELOG.md).
 
 ## Security
 
-If you discover any security related issues, please email jean.pierre@lab123.com.br instead of using the issue tracker.
+If you discover a security issue, please email jean.pierre@lab123.com.br instead of using the issue tracker.
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+See [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Credits
 
 - [Jean Pierre](https://github.com/jeanpfs)
-- [Felipe Santos](https://github.com/felipeds2)
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). See [License File](LICENSE.md).
