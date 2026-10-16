@@ -2,11 +2,13 @@
 
 namespace LumenNotification;
 
+use Illuminate\Contracts\Mail\Factory as MailFactoryContract;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Foundation\Application as FoundationApplication;
 use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Notifications\NotificationServiceProvider;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\Factory as ViewFactory;
 use LumenNotification\Commands\LumenNotificationMakeCommand;
 use LumenNotification\Commands\LumenNotificationPublishCommand;
 use LumenNotification\Commands\NotificationTableCommand;
@@ -77,11 +79,18 @@ class LumenNotificationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bind the mailer contract to the mailer instance.
+     * Bind the contracts Lumen does not alias: the mail notification channel
+     * needs the mail factory, and blade components resolve the concrete view
+     * factory.
      */
     protected function registerBind(): void
     {
         $this->app->bind(MailerContract::class, fn ($app) => $app['mailer']);
+        $this->app->bind(MailFactoryContract::class, fn ($app) => $app['mail.manager']);
+
+        if (! $this->app->isAlias(ViewFactory::class)) {
+            $this->app->bind(ViewFactory::class, fn ($app) => $app['view']);
+        }
     }
 
     /**
