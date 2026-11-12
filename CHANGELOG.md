@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.1
 
 - The service provider no longer registers Illuminate's `MailServiceProvider` when the
   application already bound `mail.manager`, so a custom mail provider registered earlier is
