@@ -25,6 +25,16 @@ class ServiceProviderTest extends TestCase
         $this->assertInstanceOf(Dispatcher::class, $this->app->make(Dispatcher::class));
     }
 
+    public function test_it_keeps_a_mail_manager_the_application_already_registered(): void
+    {
+        $custom = new \stdClass;
+        $this->app->singleton('mail.manager', fn () => $custom);
+
+        $this->app->register(LumenNotificationServiceProvider::class, true);
+
+        $this->assertSame($custom, $this->app->make('mail.manager'));
+    }
+
     public function test_package_defaults_fill_keys_the_application_does_not_define(): void
     {
         $this->assertSame('us-east-1', config('services.sns.region'));

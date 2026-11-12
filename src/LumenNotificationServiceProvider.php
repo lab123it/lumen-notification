@@ -71,11 +71,17 @@ class LumenNotificationServiceProvider extends ServiceProvider
 
     /**
      * Register the Laravel providers needed by notifications.
+     *
+     * The mail provider is left to the application when it already registered
+     * its own, so a custom mailer is not replaced by the default one.
      */
     protected function registerProviders(): void
     {
         $this->app->register(NotificationServiceProvider::class);
-        $this->app->register(MailServiceProvider::class);
+
+        if (! $this->app->bound('mail.manager')) {
+            $this->app->register(MailServiceProvider::class);
+        }
     }
 
     /**
