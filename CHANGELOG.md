@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- The service provider no longer registers Illuminate's `MailServiceProvider` when the
+  application already bound `mail.manager`, so a custom mail provider registered earlier is
+  not replaced by the default one.
+
 ## 1.0.0
 
 Breaking release: the package is rebuilt for current Lumen and Laravel.
